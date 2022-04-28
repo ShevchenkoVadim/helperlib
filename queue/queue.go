@@ -35,11 +35,11 @@ func (r *Rabbit) TestPortRabbitMQ() {
 			defer conn.Close()
 		}
 		if err != nil {
-			if !r.ch.IsClosed() {
+			if !r.ch.IsClosed() && r.ch != nil {
 				r.ch.Close()
 				r.ch = nil
 			}
-			if !r.conn.IsClosed() {
+			if !r.conn.IsClosed() && r.ch != nil {
 				r.conn.Close()
 				r.conn = nil
 			}
