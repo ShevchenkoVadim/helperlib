@@ -25,7 +25,8 @@ func init() {
 	err = yaml.Unmarshal(f, &C)
 	if err != nil {
 		log.Fatal("Cannot read config file")
-		os.Exit(102)
+		//os.Exit(102)
+		return
 	}
 	log.Println(C)
 }
