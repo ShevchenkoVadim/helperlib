@@ -4,6 +4,8 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"net"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -142,6 +144,45 @@ func (r *Rabbit) Publish(msg []byte) error {
 	return err
 }
 
-func (r *Rabbit) Consume() {
+func (r *Rabbit) Consume() (<-chan amqp.Delivery, error) {
+	if r.conn == nil || r.ch == nil {
+		r.Channel()
+	}
+	r.TestPortRabbitMQ()
 
+	q, err := r.ch.QueueDeclare(
+		r.Queue,
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		log.Println("CHANNEL ERROR ", err)
+		return nil, err
+	}
+	<-r.WaitChannel
+
+	err = r.ch.Qos(
+		1,
+		0,
+		false,
+	)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	msgs, err := r.ch.Consume(
+		q.Name,
+		filepath.Base(os.Args[0]),
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	return msgs, nil
 }
