@@ -1,18 +1,20 @@
 package sfotypes
 
 type Configurations struct {
-	SrcPath     string      `yaml:"srcpath"`
-	DestPath    string      `yaml:"destpath"`
-	Separator   string      `yaml:"separator"`
-	LogFilePath string      `yaml:"logfilepath"`
-	DirFiles    string      `yaml:"dirfiles"`
-	MaxSizeLog  int         `yaml:"maxsizelog"`
-	SSLCert     Certificate `yaml:"ssl_cert"`
-	MQ          MqConfig    `yaml:"mq"`
-	MS          MSConfig    `yaml:"ms"`
-	DBConn      string      `yaml:"db_conn"`
-	DebugEnable bool        `yaml:"debugenable"`
-	Hostname    string      `yaml:"hostname""`
+	SrcPath       string      `yaml:"srcpath"`
+	DestPath      string      `yaml:"destpath"`
+	Separator     string      `yaml:"separator"`
+	LogFilePath   string      `yaml:"logfilepath"`
+	LogQueue      string      `yaml:"logqueue"`
+	LogDateFormat string      `yaml:"logDateFormat"`
+	DirFiles      string      `yaml:"dirfiles"`
+	MaxSizeLog    int         `yaml:"maxsizelog"`
+	SSLCert       Certificate `yaml:"ssl_cert"`
+	MQ            MqConfig    `yaml:"mq"`
+	MS            MSConfig    `yaml:"ms"`
+	DBConn        string      `yaml:"db_conn"`
+	DebugEnable   bool        `yaml:"debugenable"`
+	Hostname      string      `yaml:"hostname""`
 }
 
 type Certificate struct {
