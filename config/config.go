@@ -18,7 +18,8 @@ func init() {
 
 	if err != nil {
 		log.Fatal("Cannot open config file")
-		os.Exit(101)
+		//os.Exit(101)
+		return
 	}
 
 	err = yaml.Unmarshal(f, &C)
