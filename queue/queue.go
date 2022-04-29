@@ -30,11 +30,13 @@ func (r *Rabbit) TestPortRabbitMQ() {
 	if r.Uri != "" && len(r.Uri) > 0 {
 		uri := strings.Split(r.Uri, "@")
 		timeout := time.Second
+		log.Println("test port open")
 		conn, err := net.DialTimeout("tcp", uri[1], timeout)
 		if conn != nil {
 			defer conn.Close()
 		}
 		if err != nil {
+			log.Println(err)
 			if r.ch != nil && !r.ch.IsClosed() {
 				r.ch.Close()
 				r.ch = nil
