@@ -15,6 +15,7 @@ type Configurations struct {
 	DBConn        string      `yaml:"db_conn"`
 	DebugEnable   bool        `yaml:"debugenable"`
 	Hostname      string      `yaml:"hostname""`
+	Debug         bool        `yaml:"debug"`
 }
 
 type Certificate struct {
