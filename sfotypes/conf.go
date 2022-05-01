@@ -29,10 +29,16 @@ type Certificate struct {
 }
 
 type MqConfig struct {
-	Url         string `yaml:"url"`
-	SrcQueue    string `yaml:"srcqueue"`
-	ManageQueue string `yaml:"managequeue"`
-	LogQueue    string `yaml:"logqueue"`
+	Url             string `yaml:"url"`
+	SrcQueue        string `yaml:"srcqueue"`
+	ManageQueue     string `yaml:"managequeue"`
+	TempQueue       string `yaml:"tempqueue"`
+	MSQueue         string `yaml:"msqueue"`
+	KataQueue       string `yaml:"kataqueue"`
+	InfoWatchQueue  string `yaml:"infowatchqueue"`
+	QuarantineQueue string `yaml:"quarantinequeue"`
+	DestQueue       string `yaml:"destqueue"`
+	//LogQueue    string `yaml:"logqueue"`
 }
 
 type MSConfig struct {
