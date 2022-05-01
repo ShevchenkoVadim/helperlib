@@ -210,7 +210,7 @@ func (r *Rabbit) Consume() {
 				r.Channel()
 				r.Consume()
 			}
-			r.ChanDelivery = nil
+			logWrapper("Consume again")
 			r.ChanDelivery, err = r.ch.Consume(
 				r.Queue,
 				filepath.Base(os.Args[0]),
@@ -222,15 +222,11 @@ func (r *Rabbit) Consume() {
 			)
 			if err != nil {
 				logWrapper("CONSUME ERROR at func Consume ", err)
-				//r.Channel()
-				//r.Consume()
 			}
-			//return nil
 		}
 	} else {
 		logWrapper("Channel is nil")
 		r.Channel()
 		r.Consume()
 	}
-	//return nil
 }
