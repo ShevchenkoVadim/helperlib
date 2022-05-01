@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"github.com/ShevchenkoVadim/helperlib/config"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"net"
@@ -13,11 +14,12 @@ import (
 const delay = 3
 
 type Rabbit struct {
-	conn        *amqp.Connection
-	ch          *amqp.Channel
-	Uri         string
-	Queue       string
-	WaitChannel chan bool
+	conn         *amqp.Connection
+	ch           *amqp.Channel
+	Uri          string
+	Queue        string
+	WaitChannel  chan bool
+	ChanDelivery <-chan amqp.Delivery
 }
 
 func (r *Rabbit) writeToWaitChannel() {
@@ -26,51 +28,65 @@ func (r *Rabbit) writeToWaitChannel() {
 	}()
 }
 
+func logWrapper(msg ...any) {
+	if config.C.Debug {
+		log.Println(msg)
+	}
+}
+
 func (r *Rabbit) TestPortRabbitMQ() {
-	if r.Uri != "" && len(r.Uri) > 0 {
-		uri := strings.Split(r.Uri, "@")
-		timeout := time.Second
-		log.Println("test port open")
-		conn, err := net.DialTimeout("tcp", uri[1], timeout)
-		if conn != nil {
-			defer conn.Close()
+	logWrapper("func TestPortRabbitMQ")
+	uri := strings.Split(r.Uri, "@")
+	conn, err := net.DialTimeout("tcp", uri[1], time.Second)
+	if conn != nil {
+		defer conn.Close()
+	}
+	if err != nil {
+		logWrapper(uri[1], "Net err ", err)
+		if r.ch != nil && !r.ch.IsClosed() {
+			r.ch.Close()
+			r.ch = nil
 		}
-		if err != nil {
-			log.Println(err)
-			if r.ch != nil && !r.ch.IsClosed() {
-				r.ch.Close()
-				r.ch = nil
-			}
-			if r.ch != nil && !r.conn.IsClosed() {
-				r.conn.Close()
-				r.conn = nil
-			}
-			r.Channel()
+		if r.ch != nil && !r.conn.IsClosed() {
+			r.conn.Close()
+			r.conn = nil
 		}
+		connErr := r.Channel()
+		for connErr != nil {
+			connErr = r.Channel()
+		}
+		r.writeToWaitChannel()
+		logWrapper("Err not nil at TespPortRabbitMQ")
+	} else {
+		logWrapper("Write to wait at TestPortRabbitMQ")
 		r.writeToWaitChannel()
 	}
 }
 
 func (r *Rabbit) Connect() error {
+	logWrapper("func Connect")
+	if r.conn != nil {
+		r.conn.Close()
+	}
 	conn, err := amqp.Dial(r.Uri)
 	if err != nil {
 		return err
 	}
+	logWrapper("func Connect. Connected")
 	r.conn = conn
 	go func() {
 		for {
 			err = <-r.conn.NotifyClose(make(chan *amqp.Error))
-
+			logWrapper("Some error with connection closed at func Connect")
 			for {
 				time.Sleep(delay * time.Second)
-
 				conn, err := amqp.Dial(r.Uri)
 				if err == nil {
 					r.conn = conn
-					log.Println("reconnect success")
+					logWrapper("reconnect success at func Connect")
 					break
 				}
-				log.Println("reconnect failed ", err)
+				logWrapper("reconnect failed at func Connect: ", err)
 			}
 		}
 	}()
@@ -78,9 +94,7 @@ func (r *Rabbit) Connect() error {
 }
 
 func (r *Rabbit) Channel() error {
-	if r.conn != nil {
-		r.conn.Close()
-	}
+	logWrapper("func Channel")
 	err := r.Connect()
 	if err != nil {
 		return err
@@ -90,23 +104,26 @@ func (r *Rabbit) Channel() error {
 	if err != nil {
 		return err
 	}
-
+	logWrapper("func Channel. Channel created")
 	r.ch = ch
 	go func() {
 		for {
 			err = <-r.ch.NotifyClose(make(chan *amqp.Error))
-
+			logWrapper("Found error at func Channel. From NotifyClose")
 			for {
 				time.Sleep(delay * time.Second)
-
+				err = r.Connect()
+				if err != nil {
+					continue
+				}
 				ch, err := r.conn.Channel()
 				if err == nil {
-					log.Println("channel recreate success")
+					logWrapper("channel recreate success")
 					r.ch = ch
 					r.writeToWaitChannel()
 					break
 				}
-				log.Println("channel recreate failed ", err)
+				logWrapper("channel recreate failed ", err)
 			}
 		}
 	}()
@@ -114,77 +131,106 @@ func (r *Rabbit) Channel() error {
 }
 
 func (r *Rabbit) Publish(msg []byte) error {
+	logWrapper("func Publish")
 	if r.conn == nil || r.ch == nil {
 		r.Channel()
 	}
 	r.TestPortRabbitMQ()
-	q, err := r.ch.QueueDeclare(
-		r.Queue,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		log.Println("CHANNEL ERROR ", err)
-	}
+	logWrapper("Wait for port opened")
 	<-r.WaitChannel
-	err = r.ch.Publish(
-		"",
-		q.Name,
-		false,
-		false,
-		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        msg,
-		})
-	if err != nil {
-		log.Println("PUBLISH ERROR ", err)
-	}
+	if r.ch != nil {
+		logWrapper("QueuerDeclare")
+		_, err := r.ch.QueueDeclare(
+			r.Queue,
+			true,
+			false,
+			false,
+			false,
+			nil,
+		)
+		if err != nil {
+			logWrapper("CHANNEL ERROR at func Publish ", err)
+			r.Channel()
+			r.Publish(msg)
+		} else {
+			err = r.ch.Publish(
+				"",
+				r.Queue,
+				false,
+				false,
+				amqp.Publishing{
+					ContentType: "application/json",
+					Body:        msg,
+				})
+			if err != nil {
+				logWrapper("PUBLISH ERROR at func Publish", err)
+			}
+			return err
+		}
 
-	return err
+	} else {
+		logWrapper("Channel is nil")
+		r.Channel()
+		r.Publish(msg)
+	}
+	return nil
 }
 
-func (r *Rabbit) Consume() (<-chan amqp.Delivery, error) {
+func (r *Rabbit) Consume() {
+	logWrapper("func Consume")
 	if r.conn == nil || r.ch == nil {
 		r.Channel()
 	}
 	r.TestPortRabbitMQ()
-
-	q, err := r.ch.QueueDeclare(
-		r.Queue,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		log.Println("CHANNEL ERROR ", err)
-		return nil, err
-	}
+	logWrapper("Wait for port opened")
 	<-r.WaitChannel
+	if r.ch != nil {
+		logWrapper("QueuerDeclare")
+		_, err := r.ch.QueueDeclare(
+			r.Queue,
+			true,
+			false,
+			false,
+			false,
+			nil,
+		)
+		if err != nil {
+			logWrapper("CHANNEL ERROR at func Consume ", err)
+			r.Channel()
+			r.Consume()
+		} else {
+			err = r.ch.Qos(
+				1,
+				0,
+				false,
+			)
 
-	err = r.ch.Qos(
-		1,
-		0,
-		false,
-	)
-
-	if err != nil {
-		log.Println(err)
-		return nil, err
+			if err != nil {
+				logWrapper("QOS ERROR at func Consume ", err)
+				r.Channel()
+				r.Consume()
+			}
+			r.ChanDelivery = nil
+			r.ChanDelivery, err = r.ch.Consume(
+				r.Queue,
+				filepath.Base(os.Args[0]),
+				false,
+				false,
+				false,
+				false,
+				nil,
+			)
+			if err != nil {
+				logWrapper("CONSUME ERROR at func Consume ", err)
+				//r.Channel()
+				//r.Consume()
+			}
+			//return nil
+		}
+	} else {
+		logWrapper("Channel is nil")
+		r.Channel()
+		r.Consume()
 	}
-
-	msgs, err := r.ch.Consume(
-		q.Name,
-		filepath.Base(os.Args[0]),
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
-	return msgs, nil
+	//return nil
 }
