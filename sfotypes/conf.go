@@ -14,7 +14,7 @@ type Configurations struct {
 	MS            MSConfig    `yaml:"ms"`
 	DBConn        string      `yaml:"db_conn"`
 	DebugEnable   bool        `yaml:"debugenable"`
-	Hostname      string      `yaml:"hostname""`
+	Hostname      string      `yaml:"hostname"`
 	Debug         bool        `yaml:"debug"`
 	Filter        string      `yaml:"filter"`
 	ScanPath      string      `yaml:"scanpath"`
