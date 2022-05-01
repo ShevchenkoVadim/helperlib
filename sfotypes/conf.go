@@ -16,6 +16,10 @@ type Configurations struct {
 	DebugEnable   bool        `yaml:"debugenable"`
 	Hostname      string      `yaml:"hostname""`
 	Debug         bool        `yaml:"debug"`
+	Filter        string      `yaml:"filter"`
+	ScanPath      string      `yaml:"scanpath"`
+	OsType        string      `yaml:"ostype"`
+	ScanTimeout   int         `yaml:"scantimeout"`
 }
 
 type Certificate struct {
