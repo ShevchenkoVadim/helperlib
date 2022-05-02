@@ -53,7 +53,6 @@ func (mgr *DBManager) Connect() {
 	utils.LogWrapper("DB Connect")
 	go mgr.checkConnect()
 	<-mgr.WaitChannel
-	utils.LogWrapper("DB Connect2")
 	uri := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;connection timeout=%d",
 		mgr.DbConn.Server, mgr.DbConn.User, mgr.DbConn.Password, mgr.DbConn.Port, mgr.DbConn.Timeout)
 	fmt.Println(uri)
@@ -61,7 +60,6 @@ func (mgr *DBManager) Connect() {
 	if err != nil {
 		log.Fatal("Failed to init db:", err)
 	}
-	log.Println("Init DB is OK")
 	mgr.db = db
 }
 
@@ -90,7 +88,6 @@ func (mgr *DBManager) execWithPrepare(query string, args ...any) (*sql.Stmt, err
 	var err error
 
 	for {
-		utils.LogWrapper("execWithPrepare: Prepare")
 		stmt, err = mgr.db.Prepare(query)
 		if err != nil {
 			log.Println("ERROR: ", err)
