@@ -51,3 +51,9 @@ func GetTlsContext() (*tls.Config, error) {
 	}
 	return tlsContext, nil
 }
+
+func LogWrapper(msg ...any) {
+	if config.C.Debug {
+		log.Println(msg)
+	}
+}
