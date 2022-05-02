@@ -97,10 +97,8 @@ func (mgr *DBManager) execWithPrepare(query string, args ...any) (*sql.Stmt, err
 			go mgr.checkConnect()
 			<-mgr.WaitChannel
 			continue
-			break
 		}
 		break
-		utils.LogWrapper(err)
 	}
 	_, err2 := stmt.Exec(args...)
 	return stmt, err2
