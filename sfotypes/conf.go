@@ -1,25 +1,25 @@
 package sfotypes
 
 type Configurations struct {
-	SrcPath       string      `yaml:"srcpath"`
-	DestPath      string      `yaml:"destpath"`
-	Separator     string      `yaml:"separator"`
-	LogFilePath   string      `yaml:"logfilepath"`
-	LogQueue      string      `yaml:"logqueue"`
-	LogDateFormat string      `yaml:"logDateFormat"`
-	DirFiles      string      `yaml:"dirfiles"`
-	MaxSizeLog    int         `yaml:"maxsizelog"`
-	SSLCert       Certificate `yaml:"ssl_cert"`
-	MQ            MqConfig    `yaml:"mq"`
-	MS            MSConfig    `yaml:"ms"`
-	DBConn        string      `yaml:"db_conn"`
-	DebugEnable   bool        `yaml:"debugenable"`
-	Hostname      string      `yaml:"hostname"`
-	Debug         bool        `yaml:"debug"`
-	Filter        string      `yaml:"filter"`
-	ScanPath      string      `yaml:"scanpath"`
-	OsType        string      `yaml:"ostype"`
-	ScanTimeout   int         `yaml:"scantimeout"`
+	SrcPath       string       `yaml:"srcpath"`
+	DestPath      string       `yaml:"destpath"`
+	Separator     string       `yaml:"separator"`
+	LogFilePath   string       `yaml:"logfilepath"`
+	LogQueue      string       `yaml:"logqueue"`
+	LogDateFormat string       `yaml:"logDateFormat"`
+	DirFiles      string       `yaml:"dirfiles"`
+	MaxSizeLog    int          `yaml:"maxsizelog"`
+	SSLCert       Certificate  `yaml:"ssl_cert"`
+	MQ            MqConfig     `yaml:"mq"`
+	MS            MSConfig     `yaml:"ms"`
+	DBConn        DBConnection `yaml:"db_conn"`
+	DebugEnable   bool         `yaml:"debugenable"`
+	Hostname      string       `yaml:"hostname"`
+	Debug         bool         `yaml:"debug"`
+	Filter        string       `yaml:"filter"`
+	ScanPath      string       `yaml:"scanpath"`
+	OsType        string       `yaml:"ostype"`
+	ScanTimeout   int          `yaml:"scantimeout"`
 }
 
 type Certificate struct {
@@ -46,4 +46,13 @@ type MSConfig struct {
 	Timeout       int    `yaml:"timeout"`
 	AnalysisDepth int    `yaml:"analysis_depth"`
 	XApiKey       string `yaml:"x_api_key"`
+}
+
+type DBConnection struct {
+	Server   string `yaml:"server"`
+	Port     string `yaml:"port"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Db       string `yaml:"db"`
+	Timeout  int    `yaml:"timeout"`
 }
