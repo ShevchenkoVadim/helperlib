@@ -50,7 +50,7 @@ type MSConfig struct {
 
 type DBConnection struct {
 	Server   string `yaml:"server"`
-	Port     string `yaml:"port"`
+	Port     int    `yaml:"port"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	Db       string `yaml:"db"`
