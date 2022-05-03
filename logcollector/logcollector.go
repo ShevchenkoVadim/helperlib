@@ -47,4 +47,5 @@ func (l *LogHelper) SendLog(v ...any) {
 	go func() {
 		l.logger <- fmt.Sprint(v...)
 	}()
+	log.Println(fmt.Sprint(v...))
 }
