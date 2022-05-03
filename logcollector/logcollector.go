@@ -46,8 +46,8 @@ func (l *LogHelper) InitSendLog() {
 }
 
 func (l *LogHelper) SendLog(v ...any) {
-	log.Println(fmt.Sprint(v...))
 	go func() {
+		log.Println("---====---", v)
 		l.logger <- fmt.Sprint(v...)
 	}()
 }
