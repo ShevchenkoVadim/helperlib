@@ -39,7 +39,6 @@ func (l *LogHelper) InitSendLog() {
 	go func() {
 		for {
 			msg := <-l.logger
-			log.Println("++++++", fmt.Sprint(msg))
 			l.sendLogToQueue(filepath.Base(os.Args[0]), msg)
 		}
 	}()
@@ -47,7 +46,6 @@ func (l *LogHelper) InitSendLog() {
 
 func (l *LogHelper) SendLog(v ...any) {
 	go func() {
-		log.Println("---====---", v)
 		l.logger <- fmt.Sprint(v...)
 	}()
 }
