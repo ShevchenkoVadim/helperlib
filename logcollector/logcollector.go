@@ -3,7 +3,6 @@ package logcollector
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ShevchenkoVadim/helperlib/config"
 	"github.com/ShevchenkoVadim/helperlib/queue"
 	"github.com/ShevchenkoVadim/helperlib/sfotypes"
 	"log"
@@ -12,7 +11,14 @@ import (
 	"time"
 )
 
-func sendLogToQueue(service string, msg string) {
+type LogHelper struct {
+	Uri       string
+	LogQueue  string
+	publisher queue.Rabbit
+	logger    chan string
+}
+
+func (l *LogHelper) sendLogToQueue(service string, msg string) {
 	data := &sfotypes.LogMsg{
 		ServiceName: service,
 		Msg:         msg,
@@ -22,11 +28,23 @@ func sendLogToQueue(service string, msg string) {
 	if err != nil {
 		log.Panicln(err)
 	} else {
-		publisher := queue.Rabbit{Uri: config.C.MQ.Url, Queue: config.C.LogQueue, WaitChannel: make(chan bool)}
-		publisher.Publish(jsonData)
+		l.publisher.Publish(jsonData)
 	}
 }
 
-func SendLog(v ...any) {
-	sendLogToQueue(filepath.Base(os.Args[0]), fmt.Sprintln(v...))
+func (l *LogHelper) InitSendLog() {
+	l.publisher = queue.Rabbit{Uri: l.Uri, Queue: l.LogQueue, WaitChannel: make(chan bool)}
+	l.publisher.Channel()
+	l.logger = make(chan string, 1000)
+	go func() {
+		for {
+			l.sendLogToQueue(filepath.Base(os.Args[0]), <-l.logger)
+		}
+	}()
+}
+
+func (l *LogHelper) SendLog(v ...any) {
+	go func() {
+		l.logger <- fmt.Sprint(v...)
+	}()
 }
