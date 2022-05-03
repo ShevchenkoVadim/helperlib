@@ -38,14 +38,15 @@ func (l *LogHelper) InitSendLog() {
 	l.logger = make(chan string)
 	go func() {
 		for {
+			log.Println("++++++", fmt.Sprint(v...))
 			l.sendLogToQueue(filepath.Base(os.Args[0]), <-l.logger)
 		}
 	}()
 }
 
 func (l *LogHelper) SendLog(v ...any) {
+	log.Println(fmt.Sprint(v...))
 	go func() {
 		l.logger <- fmt.Sprint(v...)
 	}()
-	log.Println(fmt.Sprint(v...))
 }
