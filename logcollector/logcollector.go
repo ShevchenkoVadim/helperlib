@@ -35,7 +35,7 @@ func (l *LogHelper) sendLogToQueue(service string, msg string) {
 func (l *LogHelper) InitSendLog() {
 	l.publisher = queue.Rabbit{Uri: l.Uri, Queue: l.LogQueue, WaitChannel: make(chan bool)}
 	l.publisher.Channel()
-	l.logger = make(chan string, 1000)
+	l.logger = make(chan string)
 	go func() {
 		for {
 			l.sendLogToQueue(filepath.Base(os.Args[0]), <-l.logger)
