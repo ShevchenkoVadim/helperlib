@@ -38,6 +38,7 @@ type MqConfig struct {
 	InfoWatchQueue  string `yaml:"infowatchqueue"`
 	QuarantineQueue string `yaml:"quarantinequeue"`
 	DestQueue       string `yaml:"destqueue"`
+	Notifier        string `yaml:"notifier"`
 	//LogQueue    string `yaml:"logqueue"`
 }
 
