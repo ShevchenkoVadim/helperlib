@@ -5,6 +5,7 @@ type UserFile struct {
 }
 
 type UserData struct {
+	Service   string     `yaml:"service"`
 	UserName  string     `json:"user_name"`
 	Files     []UserFile `json:"files"`
 	TimeStamp int64      `json:"timeStamp"`
