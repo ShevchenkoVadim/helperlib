@@ -17,3 +17,8 @@ type FileToCheck struct {
 	HostName  string `json:"hostname"`
 	Timestamp int64  `json:"timestamp"`
 }
+
+type ServiceTask struct {
+	Service string      `yaml:"service"`
+	File    FileToCheck `yaml:"file"`
+}
