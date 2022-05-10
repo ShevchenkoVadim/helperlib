@@ -57,3 +57,10 @@ type DBConnection struct {
 	Db       string `yaml:"db"`
 	Timeout  int    `yaml:"timeout"`
 }
+
+type KataConfig struct {
+	ApiUri   string `yaml:"api"`
+	KataId   string `yaml:"kataid"`
+	Instance string `yaml:"instance"`
+	Timeout  int    `yaml:"timeout"`
+}
