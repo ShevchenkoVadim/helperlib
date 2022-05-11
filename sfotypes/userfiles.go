@@ -21,4 +21,5 @@ type FileToCheck struct {
 type ServiceTask struct {
 	Service string      `yaml:"service"`
 	File    FileToCheck `yaml:"file"`
+	Status  string      `yaml:"status"`
 }
