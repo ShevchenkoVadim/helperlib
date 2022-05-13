@@ -19,8 +19,8 @@ type FileToCheck struct {
 }
 
 type ServiceTask struct {
-	Service   string      `yaml:"service"`
-	File      FileToCheck `yaml:"file"`
-	Status    string      `yaml:"status"`
-	StatusExt string      `yaml:"status_ext"`
+	Service   string      `json:"service"`
+	File      FileToCheck `json:"file"`
+	Status    string      `json:"status"`
+	StatusExt string      `json:"status_ext"`
 }
