@@ -21,6 +21,7 @@ type Configurations struct {
 	ScanPath      string       `yaml:"scanpath"`
 	OsType        string       `yaml:"ostype"`
 	ScanTimeout   int          `yaml:"scantimeout"`
+	MoverType     int          `yaml:"movertype"`
 }
 
 type Certificate struct {
