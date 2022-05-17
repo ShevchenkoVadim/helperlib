@@ -21,6 +21,7 @@ type FileToCheck struct {
 type ServiceTask struct {
 	Service   string      `json:"service"`
 	File      FileToCheck `json:"file"`
+	UserDatas UserData    `json:"user_data"`
 	Status    string      `json:"status"`
 	StatusExt string      `json:"status_ext"`
 }
