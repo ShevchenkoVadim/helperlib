@@ -66,3 +66,11 @@ type KataConfig struct {
 	Instance string `yaml:"instance"`
 	Timeout  int    `yaml:"timeout"`
 }
+
+type IWConfig struct {
+	ApiUrl        string `yaml:"api_url"`
+	Token         string `yaml:"token"`
+	SystemId      string `yaml:"system_id"`
+	SystemClass   string `yaml:"system_class"`
+	SystemService string `yaml:"system_service"`
+}
