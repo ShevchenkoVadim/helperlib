@@ -12,6 +12,7 @@ type Configurations struct {
 	SSLCert       Certificate  `yaml:"ssl_cert"`
 	MQ            MqConfig     `yaml:"mq"`
 	MS            MSConfig     `yaml:"ms"`
+	IW            IWConfig     `yaml:"iw"`
 	Kata          KataConfig   `yaml:"kata"`
 	DBConn        DBConnection `yaml:"db_conn"`
 	DebugEnable   bool         `yaml:"debugenable"`
