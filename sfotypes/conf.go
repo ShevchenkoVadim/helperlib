@@ -81,5 +81,5 @@ type NotifyConfig struct {
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	SMPTHost string `yaml:"smpt_host"`
-	SMTPPort int    `yaml:"smtp_port"`
+	SMPTPort string `yaml:"smpt_port"`
 }
