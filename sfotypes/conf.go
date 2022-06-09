@@ -14,6 +14,7 @@ type Configurations struct {
 	MS            MSConfig     `yaml:"ms"`
 	IW            IWConfig     `yaml:"iw"`
 	Kata          KataConfig   `yaml:"kata"`
+	Notify        NotifyConfig `yaml:"notify"`
 	DBConn        DBConnection `yaml:"db_conn"`
 	DebugEnable   bool         `yaml:"debugenable"`
 	Hostname      string       `yaml:"hostname"`
@@ -74,4 +75,11 @@ type IWConfig struct {
 	SystemId      string `yaml:"system_id"`
 	SystemClass   string `yaml:"system_class"`
 	SystemService string `yaml:"system_service"`
+}
+
+type NotifyConfig struct {
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	SMPTHost string `yaml:"smpt_host"`
+	SMTPPort int    `yaml:"smtp_port"`
 }
