@@ -3,6 +3,7 @@ package dbprovider
 import (
 	"database/sql"
 	"fmt"
+	"github.com/ShevchenkoVadim/helperlib/config"
 	"github.com/ShevchenkoVadim/helperlib/sfotypes"
 	"github.com/ShevchenkoVadim/helperlib/utils"
 	_ "github.com/denisenkom/go-mssqldb"
@@ -53,9 +54,14 @@ func (mgr *DBManager) Connect() {
 	utils.LogWrapper("DB Connect")
 	go mgr.checkConnect()
 	<-mgr.WaitChannel
-	uri := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;connection timeout=%d;database=%s",
-		mgr.DbConn.Server, mgr.DbConn.User, mgr.DbConn.Password, mgr.DbConn.Port, mgr.DbConn.Timeout, mgr.DbConn.Db)
-	fmt.Println(uri)
+	//uri := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&connection+timeout=%d",
+	//	mgr.DbConn.Server, mgr.DbConn.User, mgr.DbConn.Password, mgr.DbConn.Port, mgr.DbConn.Timeout, mgr.DbConn.Db)
+	uri := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&connection+timeout=%d",
+		config.C.DBConn.User, config.C.DBConn.Password, config.C.DBConn.Server,
+		config.C.DBConn.Port, config.C.DBConn.Db, config.C.DBConn.Timeout)
+	if config.C.Debug {
+		fmt.Println(uri)
+	}
 	db, err := sql.Open("sqlserver", uri)
 	if err != nil {
 		log.Fatal("Failed to init db:", err)
