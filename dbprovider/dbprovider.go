@@ -117,3 +117,7 @@ func (mgr *DBManager) DeleteFileName(filePath string, userName string) (*sql.Stm
 func (mgr *DBManager) SelectQuery(query string) *sql.Row {
 	return mgr.db.QueryRow(query)
 }
+
+func (mgr *DBManager) GetDb() *sql.DB {
+	return mgr.db
+}
