@@ -113,3 +113,7 @@ func (mgr *DBManager) DeleteFileName(filePath string, userName string) (*sql.Stm
 	stmt, err2 := mgr.execWithPrepare(query, filePath, userName)
 	return stmt, err2
 }
+
+func (mgr *DBManager) SelectQuery(query string) *sql.Row {
+	return mgr.db.QueryRow(query)
+}
