@@ -53,8 +53,8 @@ func (mgr *DBManager) Connect() {
 	utils.LogWrapper("DB Connect")
 	go mgr.checkConnect()
 	<-mgr.WaitChannel
-	uri := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;connection timeout=%d",
-		mgr.DbConn.Server, mgr.DbConn.User, mgr.DbConn.Password, mgr.DbConn.Port, mgr.DbConn.Timeout)
+	uri := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;connection timeout=%d;database=%s",
+		mgr.DbConn.Server, mgr.DbConn.User, mgr.DbConn.Password, mgr.DbConn.Port, mgr.DbConn.Timeout, mgr.DbConn.Db)
 	fmt.Println(uri)
 	db, err := sql.Open("sqlserver", uri)
 	if err != nil {
