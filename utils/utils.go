@@ -54,6 +54,6 @@ func GetTlsContext() (*tls.Config, error) {
 
 func LogWrapper(msg ...any) {
 	if config.C.Debug {
-		log.Println(msg)
+		log.Println(msg...)
 	}
 }
