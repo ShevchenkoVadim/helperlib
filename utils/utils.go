@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"github.com/ShevchenkoVadim/helperlib/config"
+	"github.com/danieljoos/wincred"
 	"io/ioutil"
 	"log"
 	"os"
@@ -55,5 +56,36 @@ func GetTlsContext() (*tls.Config, error) {
 func LogWrapper(msg ...any) {
 	if config.C.Debug {
 		log.Println(msg...)
+	}
+}
+
+func CreateNewCred(name, secret string) error {
+	cred := wincred.NewGenericCredential(name)
+	cred.CredentialBlob = []byte(secret)
+	err := cred.Write()
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func GetCred(name string) (string, error) {
+	cred, err := wincred.GetGenericCredential(name)
+	if err == nil {
+		return string(cred.CredentialBlob), nil
+	}
+	return "", err
+}
+
+func ListAllCreds() {
+	creds, err := wincred.List()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	for i := range creds {
+		log.Println(creds[i].TargetName)
 	}
 }
