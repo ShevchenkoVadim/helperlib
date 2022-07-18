@@ -151,7 +151,18 @@ func (mgr *DBManager) CreateTable() {
 
 func (mgr *DBManager) DropTable() {
 	query := "DROP TABLE files"
-	utils.LogWrapper("Create table:", query)
+	utils.LogWrapper("Drop table:", query)
+	stmt, err := mgr.execWithPrepare(query)
+	if err != nil {
+		utils.LogWrapper(err)
+		return
+	}
+	defer stmt.Close()
+}
+
+func (mgr *DBManager) TuncateTable() {
+	query := "TRUNCATE TABLE files"
+	utils.LogWrapper("Truncate table:", query)
 	stmt, err := mgr.execWithPrepare(query)
 	if err != nil {
 		utils.LogWrapper(err)
