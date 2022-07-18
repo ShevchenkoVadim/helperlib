@@ -37,7 +37,6 @@ func logWrapper(msg ...any) {
 func (r *Rabbit) TestPortRabbitMQ() {
 	logWrapper("func TestPortRabbitMQ")
 	uri := strings.Split(r.Uri, "@")
-	log.Println("!!!!", uri)
 	conn, err := net.DialTimeout("tcp", uri[1], time.Second)
 	if conn != nil {
 		defer conn.Close()
