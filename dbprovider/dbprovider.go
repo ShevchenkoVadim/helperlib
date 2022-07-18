@@ -128,3 +128,25 @@ func (mgr *DBManager) SelectQuery(query string) *sql.Row {
 func (mgr *DBManager) GetDb() *sql.DB {
 	return mgr.db
 }
+
+func (mgr *DBManager) CreateTable {
+	query := "CREATE TABLE files([filename] [varchar](255) NOT NULL,[username] [varchar](255) NOT NULL,[taskstatus] [int] NULL) ON [PRIMARY]"
+	utils.LogWrapper("Create table:", query)
+	stmt, err := mgr.execWithPrepare(query)
+	if err != nil {
+		utils.LogWrapper(err)
+		return
+	}
+	defer stmt.Close()
+}
+
+func (mgr *DBManager) DropTable() {
+	query := "DROP TABLE files"
+	utils.LogWrapper("Create table:", query)
+	stmt, err := mgr.execWithPrepare(query)
+	if err != nil {
+		utils.LogWrapper(err)
+		return
+	}
+	defer stmt.Close()
+}
