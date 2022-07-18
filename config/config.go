@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/ShevchenkoVadim/helperlib/sfotypes"
+	"github.com/ShevchenkoVadim/helperlib/utils"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -28,5 +29,5 @@ func init() {
 		//os.Exit(102)
 		return
 	}
-	log.Println(C)
+	utils.LogWrapper(C)
 }
