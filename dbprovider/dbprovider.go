@@ -160,7 +160,7 @@ func (mgr *DBManager) DropTable() {
 	defer stmt.Close()
 }
 
-func (mgr *DBManager) TuncateTable() {
+func (mgr *DBManager) TruncateTable() {
 	query := "TRUNCATE TABLE files"
 	utils.LogWrapper("Truncate table:", query)
 	stmt, err := mgr.execWithPrepare(query)
