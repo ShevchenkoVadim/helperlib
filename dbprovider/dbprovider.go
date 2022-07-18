@@ -129,7 +129,7 @@ func (mgr *DBManager) GetDb() *sql.DB {
 	return mgr.db
 }
 
-func (mgr *DBManager) CreateTable {
+func (mgr *DBManager) CreateTable() {
 	query := "CREATE TABLE files([filename] [varchar](255) NOT NULL,[username] [varchar](255) NOT NULL,[taskstatus] [int] NULL) ON [PRIMARY]"
 	utils.LogWrapper("Create table:", query)
 	stmt, err := mgr.execWithPrepare(query)
