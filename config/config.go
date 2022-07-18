@@ -17,7 +17,7 @@ func init() {
 	f, err := ioutil.ReadFile(configName + ".yaml")
 
 	if err != nil {
-		log.Fatal("Cannot open config file", err)
+		log.Println("Cannot open config file", err)
 		//os.Exit(101)
 		return
 	}
