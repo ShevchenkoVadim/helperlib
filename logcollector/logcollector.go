@@ -32,7 +32,10 @@ func (l *LogHelper) sendLogToQueue(service string, msg string) {
 	}
 }
 
-func (l *LogHelper) InitSendLog() {
+func (l *LogHelper) InitSendLog(url string) {
+	if url != "" {
+		l.Uri = url
+	}
 	l.publisher = queue.Rabbit{Uri: l.Uri, Queue: l.LogQueue, WaitChannel: make(chan bool)}
 	l.publisher.Channel()
 	l.logger = make(chan string)
