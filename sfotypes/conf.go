@@ -82,6 +82,7 @@ type NotifyConfig struct {
 	Password      string `yaml:"password"`
 	SMPTHost      string `yaml:"smpt_host"`
 	SMPTPort      string `yaml:"smpt_port"`
+	FromUser      string `yaml:"from_user"`
 	CitrixBrocker string `yaml:"citrix_srv"`
 	Domain        string `yaml:"domain"`
 }
