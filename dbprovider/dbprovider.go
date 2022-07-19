@@ -52,23 +52,28 @@ func (mgr *DBManager) checkConnect() {
 }
 
 func (mgr *DBManager) Connect() {
-	if config.C.DBConn.Password != "" {
-		utils.CreateNewCred("db_password", config.C.DBConn.Password)
-	}
-	dbPassword, err := utils.GetCred("db_password")
-	if err != nil {
-		log.Println("DB password is empty", err)
-		os.Exit(1)
-	}
 
 	go mgr.checkConnect()
 	<-mgr.WaitChannel
 	utils.LogWrapper("DB is tried to connoent")
-	//uri := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&connection+timeout=%d",
-	//	mgr.DbConn.Server, mgr.DbConn.User, mgr.DbConn.Password, mgr.DbConn.Port, mgr.DbConn.Timeout, mgr.DbConn.Db)
-	uri := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&connection+timeout=%d",
-		config.C.DBConn.User, dbPassword, config.C.DBConn.Server,
-		config.C.DBConn.Port, config.C.DBConn.Db, config.C.DBConn.Timeout)
+
+	var uri string
+	if config.C.DBConn.User != "" {
+		if config.C.DBConn.Password != "" {
+			utils.CreateNewCred("db_password", config.C.DBConn.Password)
+		}
+		dbPassword, err := utils.GetCred("db_password")
+		if err != nil {
+			log.Println("DB password is empty", err)
+			os.Exit(1)
+		}
+		uri = fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&connection+timeout=%d",
+			config.C.DBConn.User, dbPassword, config.C.DBConn.Server, config.C.DBConn.Port,
+			config.C.DBConn.Db, config.C.DBConn.Timeout)
+	} else {
+		uri = fmt.Sprintf("sqlserver://%s:%d?database=%s&trusted+connection=yes&connection+timeout=%d",
+			config.C.DBConn.Server, config.C.DBConn.Port, config.C.DBConn.Db, config.C.DBConn.Timeout)
+	}
 	utils.LogWrapper(uri)
 
 	db, err := sql.Open("sqlserver", uri)
