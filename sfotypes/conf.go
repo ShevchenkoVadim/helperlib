@@ -78,11 +78,11 @@ type IWConfig struct {
 }
 
 type NotifyConfig struct {
-	User          string `yaml:"user"`
-	Password      string `yaml:"password"`
 	SMPTHost      string `yaml:"smpt_host"`
 	SMPTPort      string `yaml:"smpt_port"`
+	MailDomain    string `yaml:"mail_domain"`
 	FromUser      string `yaml:"from_user"`
+	SendMail      bool   `yaml:"send_mail"`
 	CitrixBrocker string `yaml:"citrix_srv"`
-	Domain        string `yaml:"domain"`
+	CitrixDomain  string `yaml:"citrix_domain"`
 }
