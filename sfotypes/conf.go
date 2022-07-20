@@ -78,11 +78,12 @@ type IWConfig struct {
 }
 
 type NotifyConfig struct {
-	SMPTHost      string `yaml:"smpt_host"`
-	SMPTPort      string `yaml:"smpt_port"`
-	MailDomain    string `yaml:"mail_domain"`
-	FromUser      string `yaml:"from_user"`
-	SendMail      bool   `yaml:"send_mail"`
-	CitrixBrocker string `yaml:"citrix_srv"`
-	CitrixDomain  string `yaml:"citrix_domain"`
+	SMPTHost           string `yaml:"smpt_host"`
+	SMPTPort           string `yaml:"smpt_port"`
+	MailDomain         string `yaml:"mail_domain"`
+	FromUser           string `yaml:"from_user"`
+	SendMail           bool   `yaml:"send_mail"`
+	CitrixBrocker      string `yaml:"citrix_srv"`
+	CitrixDomain       string `yaml:"citrix_domain"`
+	CitrixMessageTitle string `yaml:"citrix_message_title"`
 }
