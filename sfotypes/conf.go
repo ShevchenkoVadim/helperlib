@@ -25,6 +25,7 @@ type Configurations struct {
 	OsType             string       `yaml:"ostype"`
 	ScanTimeout        int          `yaml:"scantimeout"`
 	MoverType          int          `yaml:"movertype"`
+	EnableNotifyUser   bool         `yaml:"enable_notify_user"`
 }
 
 type Certificate struct {
