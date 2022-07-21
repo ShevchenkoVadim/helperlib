@@ -26,6 +26,7 @@ type Configurations struct {
 	ScanTimeout        int          `yaml:"scantimeout"`
 	MoverType          int          `yaml:"movertype"`
 	EnableNotifyUser   bool         `yaml:"enable_notify_user"`
+	Text               TextData     `yaml:"text"`
 }
 
 type Certificate struct {
