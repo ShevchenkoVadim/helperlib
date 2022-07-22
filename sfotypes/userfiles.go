@@ -20,6 +20,7 @@ type FileToCheck struct {
 
 type ServiceTask struct {
 	Service   string      `json:"service"`
+	Hostname  string      `json:"hostname"`
 	File      FileToCheck `json:"file"`
 	UserDatas UserData    `json:"user_data"`
 	Status    string      `json:"status"`
