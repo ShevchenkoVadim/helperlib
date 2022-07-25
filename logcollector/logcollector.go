@@ -14,12 +14,14 @@ import (
 type LogHelper struct {
 	Uri       string
 	LogQueue  string
+	HostName  string
 	publisher queue.Rabbit
 	logger    chan string
 }
 
 func (l *LogHelper) sendLogToQueue(service string, msg string) {
 	data := &sfotypes.LogMsg{
+		HostName:    l.HostName,
 		ServiceName: service,
 		Msg:         msg,
 		TimeStamp:   time.Now().Unix(),
