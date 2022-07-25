@@ -64,9 +64,6 @@ func (r *Rabbit) TestPortRabbitMQ() {
 }
 
 func (r *Rabbit) Connect() error {
-	if r.Delay == nil {
-		r.Delay = 3
-	}
 	//logWrapper("Connect to queue server: ", r.Uri)
 	if r.conn != nil {
 		r.conn.Close()
