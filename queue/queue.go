@@ -80,7 +80,7 @@ func (r *Rabbit) Connect() error {
 			utils.LogWrapper("Some error with connection closed at func Connect")
 			for {
 				time.Sleep(r.Delay * time.Second)
-				utils.LogWrapper("@@@@", r.conn.IsClosed())
+				//utils.LogWrapper("@@@@", r.conn.IsClosed())
 				if r.conn.IsClosed() {
 					//conn, err := amqp.Dial(r.Uri)
 					//if err == nil {
